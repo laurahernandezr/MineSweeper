@@ -77,16 +77,18 @@ public:
         
     
     void printBoard(bool realBoard)
-    {
+    { // prints number up
         cout<<"  ";
         for (int z = 0; z<size; z++) {
             cout << setw(2)<< z;
         }
         cout<<endl;
+        // prints the actual board
         if (realBoard == true)
         {
             for(int y=0;y<size;y++)
             {
+                //prints the numbers down
                 cout<<setw(2)<<y;
                 for(int x=0;x<size;x++)
                 {
@@ -95,6 +97,7 @@ public:
 
                 cout<<endl;
             }
+        //prints the number of the mines list
             cout<<endl;
             for(int y=0;y<2;y++)
             {
@@ -106,6 +109,7 @@ public:
                 cout<<endl;
             }
         }
+        // prints the just playable
         else if (realBoard == false)
         {
             for(int y=0;y<size;y++)
