@@ -21,7 +21,8 @@ private:
     char adjacent[25][25];
     int minesList[100][2];
 public:
-    Board(string difficulty){
+    Board(string difficulty)
+    {
         if(difficulty == "Beginner")
         {
             size = 9;
@@ -50,29 +51,76 @@ public:
             }
         }
         //fills the board with the bombs
-        if (realBoard == true) {
+        if (realBoard == true)
+        {
             int rnumb= 0;
             int rnumb2= 0;
-            for(int i= 0; i<mines;i++){
+            for(int i= 0; i<mines;i++)
+            {
                 rnumb = rand() % size;
                 rnumb2= rand() % size;
                 minesList[i][0] = rnumb;
                 minesList[i][1] = rnumb2;
-                if (real[rnumb][rnumb2] != '*') {
+                if (real[rnumb][rnumb2] != '*')
+                {
                     real[rnumb][rnumb2] = '*';
-                }else i--;
+                }
+                else i--;
             }
         }
         //fills the board with numbers
         
-        //copies the boards
-        for (int i = 0; i<size; i++)
+        //adjacent numbers
+        for (int j = 0; j<size; j++)
         {
-            for (int j = 0; j<size; j++) {
+            for (int i = 0; i<size; i++)
+            {
                 adjacent[i][j] = real[i][j];
+                
             }
         }
-        
+        for (int i = 0; i<size; i++)
+        {
+            int x = (minesList[i][0]);
+            int y =(minesList[i][1]);
+            
+                    if (x != 0) {
+                        if (adjacent[x-1][y] != '*')
+                        {
+                            adjacent[x-1][y] = '0'+ 1;
+                        }
+                        //adjacent[(minesList[i][0]-1)][(minesList[i][1])-1] = '0'+ 1;
+                        //adjacent[(minesList[i][0])+1][(minesList[i][1])-1] = '0'+ 1;
+                    }
+                    if (x!= size)
+                    {
+                          if (adjacent[x+1][y] != '*')
+                          {
+                                adjacent[x+1][y] = '0'+ 1;
+                          }
+                        //adjacent[(minesList[i][0])-1][(minesList[i][1])+1] = '0'+ 1;
+                        //adjacent[(minesList[i][0])+1][(minesList[i][1])+1] = '0'+ 1;
+                    }
+                    if (y != 0)
+                    {
+                        if (adjacent[x][y-1] != '*')
+                        {
+                            adjacent[x][y-1] = '0'+ 1;
+                        }
+                        //adjacent[(minesList[i][0])-1][(minesList[i][1])-1] = '0'+ 1;
+                        //adjacent[(minesList[i][0])-1][(minesList[i][1])+1] = '0'+ 1;
+                    }
+                    if (y != size)
+                    {
+                        if (adjacent[x][y+1] != '*')
+                        {
+                            adjacent[x][y+1] = '0'+ 1;
+                        }
+                        //adjacent[(minesList[i][0])+1][(minesList[i][1])-1] = '0'+ 1;
+                        //adjacent[(minesList[i][0])+1][(minesList[i][1])+1] = '0'+ 1;
+                        
+                    }
+            }
     }
         
     
@@ -96,6 +144,7 @@ public:
                 }
 
                 cout<<endl;
+                
             }
         //prints the number of the mines list
             cout<<endl;
@@ -108,7 +157,28 @@ public:
                 
                 cout<<endl;
             }
+            // prints number up
+            cout<<endl;
+            cout<<"  ";
+            for (int z = 0; z<size; z++) {
+                cout << setw(2)<< z;
+            }
+             cout<<endl;
+        //print adjacent
+            for(int y=0;y<size;y++)
+            {
+    
+                //prints the numbers down
+                cout<<setw(2)<<y;
+                for(int x=0;x<size;x++)
+                {
+                    cout << setw(2)<< adjacent[x][y];
+                }
+                
+                cout<<endl;
+            }
         }
+
         // prints the just playable
         else if (realBoard == false)
         {
