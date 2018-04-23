@@ -45,7 +45,7 @@ public:
         {
             for (int i = 0; i<size; i++)
             {
-                real[i][j] = '.';
+                real[i][j] = '0';
                 playable[i][j] = '.';
                 
             }
@@ -79,56 +79,31 @@ public:
                 
             }
         }
-        for (int i = 0; i<size; i++)
+        for (int i = 0; i<mines; i++)
         {
             int x = (minesList[i][0]);
             int y =(minesList[i][1]);
+            char charT = adjacent[x][y];
             
-                    if (x != 0) {
-                        if (adjacent[x-1][y] != '*')
-                        {
-                            adjacent[x-1][y] = '0'+ 1;
-                        }
-                        //adjacent[(minesList[i][0]-1)][(minesList[i][1])-1] = '0'+ 1;
-                        //adjacent[(minesList[i][0])+1][(minesList[i][1])-1] = '0'+ 1;
-                    }
-                    if (x!= size)
-                    {
-                          if (adjacent[x+1][y] != '*')
-                          {
-                                adjacent[x+1][y] = '0'+ 1;
-                          }
-                        //adjacent[(minesList[i][0])-1][(minesList[i][1])+1] = '0'+ 1;
-                        //adjacent[(minesList[i][0])+1][(minesList[i][1])+1] = '0'+ 1;
-                    }
-                    if (y != 0)
-                    {
-                        if (adjacent[x][y-1] != '*')
-                        {
-                            adjacent[x][y-1] = '0'+ 1;
-                        }
-                        //adjacent[(minesList[i][0])-1][(minesList[i][1])-1] = '0'+ 1;
-                        //adjacent[(minesList[i][0])-1][(minesList[i][1])+1] = '0'+ 1;
-                    }
-                    if (y != size)
-                    {
-                        if (adjacent[x][y+1] != '*')
-                        {
-                            adjacent[x][y+1] = '0'+ 1;
-                        }
-                        //adjacent[(minesList[i][0])+1][(minesList[i][1])-1] = '0'+ 1;
-                        //adjacent[(minesList[i][0])+1][(minesList[i][1])+1] = '0'+ 1;
+            for (int posx = -1; posx < 2; posx++) {
+                for (int posy = -1; posy < 2; posy++) {
+                    charT = adjacent[x + posx][y + posy];
+                    if (charT != '*') {
+                        adjacent[x + posx][y + posy] = charT + 1;
                         
                     }
+                }
             }
+            
+        }
     }
         
     
     void printBoard(bool realBoard)
     { // prints number up
-        cout<<"  ";
+        cout<<"   ";
         for (int z = 0; z<size; z++) {
-            cout << setw(2)<< z;
+            cout << setw(3)<< z;
         }
         cout<<endl;
         // prints the actual board
@@ -137,10 +112,10 @@ public:
             for(int y=0;y<size;y++)
             {
                 //prints the numbers down
-                cout<<setw(2)<<y;
+                cout<<setw(3)<<y;
                 for(int x=0;x<size;x++)
                 {
-                    cout << setw(2)<< real[x][y];
+                    cout << setw(3)<< real[x][y];
                 }
 
                 cout<<endl;
@@ -159,9 +134,9 @@ public:
             }
             // prints number up
             cout<<endl;
-            cout<<"  ";
+            cout<<"   ";
             for (int z = 0; z<size; z++) {
-                cout << setw(2)<< z;
+                cout << setw(3)<< z;
             }
              cout<<endl;
         //print adjacent
@@ -169,10 +144,10 @@ public:
             {
     
                 //prints the numbers down
-                cout<<setw(2)<<y;
+                cout<<setw(3)<<y;
                 for(int x=0;x<size;x++)
                 {
-                    cout << setw(2)<< adjacent[x][y];
+                    cout << setw(3)<< adjacent[x][y];
                 }
                 
                 cout<<endl;
@@ -184,10 +159,10 @@ public:
         {
             for(int y=0;y<size;y++)
             {
-                cout<<setw(2)<<y+1;
+                cout<<setw(3)<<y+1;
                 for(int x=0;x<size;x++)
                 {
-                    cout << setw(2)<< playable[x][y];
+                    cout << setw(3)<< playable[x][y];
                 }
                 cout<<endl;
             }
