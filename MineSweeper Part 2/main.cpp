@@ -20,6 +20,7 @@ private:
     char playable[25][25];
     char adjacent[25][25];
     int minesList[100][2];
+     int counter = 0;
 public:
     Board(string difficulty)
     {
@@ -34,7 +35,7 @@ public:
             mines = 40;
         } else if(difficulty == "Advanced")
         {
-            size = 25;
+            size = 24;
             mines = 100;
         }
     }
@@ -57,8 +58,8 @@ public:
             int rnumb2= 0;
         for(int i= 0; i<mines;i++)
         {
-            rnumb = rand() % size;
-            rnumb2= rand() % size;
+            rnumb = i;//rand() % size;
+            rnumb2= i + 1;//rand() % size;
             minesList[i][0] = rnumb;
             minesList[i][1] = rnumb2;
             if (real[rnumb][rnumb2] != '*')
@@ -135,7 +136,7 @@ public:
         {
             for(int y=0;y<size;y++)
             {
-                cout<<setw(3)<<y+1;
+                cout<<setw(3)<<y;
                 for(int x=0;x<size;x++)
                 {
                     cout << setw(3)<< playable[x][y];
@@ -157,40 +158,77 @@ public:
             cout<<endl;
         }
     }
+    // merges playable and adjacent to make the game playable
+    int playableAdjacentMerger(int x, int y)
+    {
+        if (adjacent[x][y] != '*')
+        {
+            playable[x][y] = adjacent[x][y];
+            counter++;
+            if (counter == ((size*size)- mines))  {
+                return 1;
+            }
+        }
+        else
+        {
+            for(int i=0;i<size;i++)
+            {
+                for(int j=0;j<size;j++)
+                {
+                    playable[i][j] = adjacent[i][j];
+                }
+                cout<<endl;
+            }
+            cout << "Sorry! Better luck next time!";
+            return 0;
+        }
+        return 2;
+    }
 };
 
 int main() {
-    srand(time(0));
+    srand(static_cast<int>(time(0)));
     int level;
     cout <<"Please select a level: 1 for Beginner, 2 for Intermediate and 3 for Advanced"<<endl;
     cin >> level;
+    int won;
     
+    // creates the board depending on the level selected
+    string levelS;
     if (level == 1)
     {
-        Board Bboard("Beginner");
-        Bboard.createBoards();
-        Bboard.printBoard("playable");
-        Bboard.printBoard("real");
-        Bboard.printMinesList();
-        Bboard.printBoard("adjacent");
+        levelS ="Beginner";
     }
     else if (level == 2)
     {
-        Board Iboard("Intermediate");
-        Iboard.createBoards();
-        Iboard.printBoard("playable");
-        Iboard.printBoard("real");
-        Iboard.printMinesList();
-        Iboard.printBoard("adjacent");
+        levelS = "Intermediate";
     }
     else if (level == 3)
     {
-        Board Aboard("Advanced");
-        Aboard.createBoards();
-        Aboard.printBoard("playable");
-        Aboard.printBoard("real");
-        Aboard.printMinesList();
-        Aboard.printBoard("adjacent");
+        levelS = "Advanced";
     }
+    Board vboard(levelS);
+    vboard.createBoards();
+    // prints instructions on how to play and the playable board
+    cout<<"To play, please enter the box you want to press in the order of ACROSS hit space and DOWN, to restart type 99 99";
+    int accross =0;
+    int down = 0;
+    vboard.printBoard("playable");
+    do
+    {
+        cout << "input: ";
+        cin >> accross >> down;
+        won = vboard.playableAdjacentMerger(accross, down);
+        vboard.printBoard("playable");
+    }
+    while (won == 2);
+    if (won == 1){
+        cout<<"CONGRTULATIONS, YOU'VE WON"<<endl;
+    }
+    else if (won == 0){
+        cout <<"Better luck next time!";
+    }
+    cout << "Thank you for playing!"<< endl;
+    
     return 0;
 }
