@@ -38,58 +38,51 @@ public:
             mines = 100;
         }
     }
-    void createBoard(bool realBoard)
+    
+    void createBoards()
     {
-        //fills the board with points
+        //fills the real and playable board with points and adjacent with zeros
         for (int j = 0; j<size; j++)
         {
             for (int i = 0; i<size; i++)
             {
-                real[i][j] = '0';
+                real[i][j] = '.';
                 playable[i][j] = '.';
+                adjacent[i][j] = '0';
                 
             }
         }
-        //fills the board with the bombs
-        if (realBoard == true)
-        {
+        //fills the real board and the adjacent board with the bombs
             int rnumb= 0;
             int rnumb2= 0;
-            for(int i= 0; i<mines;i++)
-            {
-                rnumb = rand() % size;
-                rnumb2= rand() % size;
-                minesList[i][0] = rnumb;
-                minesList[i][1] = rnumb2;
-                if (real[rnumb][rnumb2] != '*')
-                {
-                    real[rnumb][rnumb2] = '*';
-                }
-                else i--;
-            }
-        }
-        //fills the board with numbers
-        
-        //adjacent numbers
-        for (int j = 0; j<size; j++)
+        for(int i= 0; i<mines;i++)
         {
-            for (int i = 0; i<size; i++)
+            rnumb = rand() % size;
+            rnumb2= rand() % size;
+            minesList[i][0] = rnumb;
+            minesList[i][1] = rnumb2;
+            if (real[rnumb][rnumb2] != '*')
             {
-                adjacent[i][j] = real[i][j];
-                
+                real[rnumb][rnumb2] = '*';
+                adjacent[rnumb][rnumb2] = '*';
             }
+            else i--;
         }
+        //fills adjacent with numbers
         for (int i = 0; i<mines; i++)
         {
             int x = (minesList[i][0]);
             int y =(minesList[i][1]);
             char charT = adjacent[x][y];
             
-            for (int posx = -1; posx < 2; posx++) {
-                for (int posy = -1; posy < 2; posy++) {
+            for (int posx = -1; posx < 2; posx++)
+            {
+                for (int posy = -1; posy < 2; posy++)
+                {
                     charT = adjacent[x + posx][y + posy];
-                    if (charT != '*') {
-                        adjacent[x + posx][y + posy] = charT + 1;
+                    if (charT != '*')
+                    {
+                    adjacent[x + posx][y + posy] = charT + 1;
                         
                     }
                 }
@@ -99,16 +92,18 @@ public:
     }
         
     
-    void printBoard(bool realBoard)
-    { // prints number up
+    void printBoard(string type)
+    {
+        // prints number up
+        cout<<endl;
         cout<<"   ";
         for (int z = 0; z<size; z++) {
             cout << setw(3)<< z;
         }
         cout<<endl;
-        // prints the actual board
-        if (realBoard == true)
+        if (type == "real")
         {
+        // prints real board
             for(int y=0;y<size;y++)
             {
                 //prints the numbers down
@@ -117,45 +112,26 @@ public:
                 {
                     cout << setw(3)<< real[x][y];
                 }
-
-                cout<<endl;
-                
-            }
-        //prints the number of the mines list
-            cout<<endl;
-            for(int y=0;y<2;y++)
-            {
-                for(int x=0;x<mines;x++)
-                {
-                    cout << setw(2)<< minesList[x][y];
-                }
-                
-                cout<<endl;
-            }
-            // prints number up
-            cout<<endl;
-            cout<<"   ";
-            for (int z = 0; z<size; z++) {
-                cout << setw(3)<< z;
-            }
-             cout<<endl;
-        //print adjacent
-            for(int y=0;y<size;y++)
-            {
-    
-                //prints the numbers down
-                cout<<setw(3)<<y;
-                for(int x=0;x<size;x++)
-                {
-                    cout << setw(3)<< adjacent[x][y];
-                }
-                
                 cout<<endl;
             }
         }
+        else if (type == "adjacent")
+        {
+        //print adjacent
+                for(int y=0;y<size;y++)
+                {
+                    //prints the numbers down
+                    cout<<setw(3)<<y;
+                    for(int x=0;x<size;x++)
+                    {
+                        cout << setw(3)<< adjacent[x][y];
+                    }
+                    cout<<endl;
+                }
+            }
 
-        // prints the just playable
-        else if (realBoard == false)
+        // prints playable
+        else if (type == "playable")
         {
             for(int y=0;y<size;y++)
             {
@@ -168,6 +144,19 @@ public:
             }
         }
     }
+    void printMinesList(){
+        //prints the number of the mines list
+        cout<<endl;
+        for(int y=0;y<2;y++)
+        {
+            for(int x=0;x<mines;x++)
+            {
+                cout << setw(2)<< minesList[x][y];
+            }
+            
+            cout<<endl;
+        }
+    }
 };
 
 int main() {
@@ -178,21 +167,30 @@ int main() {
     
     if (level == 1)
     {
-        Board vboard("Beginner");
-        vboard.createBoard(true);
-        vboard.printBoard(true);
+        Board Bboard("Beginner");
+        Bboard.createBoards();
+        Bboard.printBoard("playable");
+        Bboard.printBoard("real");
+        Bboard.printMinesList();
+        Bboard.printBoard("adjacent");
     }
     else if (level == 2)
     {
-        Board v2board("Intermediate");
-        v2board.createBoard(true);
-        v2board.printBoard(true);
+        Board Iboard("Intermediate");
+        Iboard.createBoards();
+        Iboard.printBoard("playable");
+        Iboard.printBoard("real");
+        Iboard.printMinesList();
+        Iboard.printBoard("adjacent");
     }
     else if (level == 3)
     {
-        Board v3board("Advanced");
-        v3board.createBoard(true);
-        v3board.printBoard(true);
+        Board Aboard("Advanced");
+        Aboard.createBoards();
+        Aboard.printBoard("playable");
+        Aboard.printBoard("real");
+        Aboard.printMinesList();
+        Aboard.printBoard("adjacent");
     }
     return 0;
 }
