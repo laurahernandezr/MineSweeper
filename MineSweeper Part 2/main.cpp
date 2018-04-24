@@ -20,8 +20,9 @@ private:
     char playable[25][25];
     char adjacent[25][25];
     int minesList[100][2];
-     int counter = 0;
+    int counter = 0;
     int total = 0;
+    int zeros[100][25];
 public:
     Board(string difficulty)
     {
@@ -160,22 +161,38 @@ public:
         }
     }
     // merges playable and adjacent to make the game playable
-    int playableAdjacentMerger(int x, int y)
+    int reveal(int x, int y)
     {
         total =(size*size) - mines;
+        //if they don't hit a mine
         if (adjacent[x][y] != '*')
         {
             if (playable[x][y] == '.')
             {
                 counter++;
-                
                 playable[x][y] = adjacent[x][y];
+                if (adjacent[x][y] == '0')
+                {
+                    for (int posx = -1; posx < 2; posx++)
+                    {
+                        for (int posy = -1; posy < 2; posy++)
+                        {
+                            if(adjacent[x + posx][y + posy] == '0')
+                            {
+                                reveal((x+posx), (y+posy));
+                            }
+                            playable[x+ posx][y+posy] = adjacent[x + posx][y + posy];
+                            counter++;
+                        }
+                    }
+                }
             }
             if (counter == total)
             {
                 return 1;
             }
         }
+        // if they hit a mine
         else
         {
             for(int i=0;i<size;i++)
@@ -192,7 +209,7 @@ public:
         return 2;
     }
 };
-
+Board test("Beginner");
 int main() {
     srand(static_cast<int>(time(0)));
     int level;
@@ -216,6 +233,7 @@ int main() {
     }
     Board vboard(levelS);
     vboard.createBoards();
+    test =vboard;
     // prints instructions on how to play and the playable board
     cout<<"To play, please enter the box you want to press in the order of ACROSS hit space and DOWN, to restart type 99 99";
     int accross =0;
@@ -225,7 +243,7 @@ int main() {
     {
         cout << "input: ";
         cin >> accross >> down;
-        won = vboard.playableAdjacentMerger(accross, down);
+        won = vboard.reveal(accross, down);
         vboard.printBoard("playable");
     }
     while (won == 2);
