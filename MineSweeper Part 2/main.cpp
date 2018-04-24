@@ -21,6 +21,7 @@ private:
     char adjacent[25][25];
     int minesList[100][2];
      int counter = 0;
+    int total = 0;
 public:
     Board(string difficulty)
     {
@@ -58,8 +59,8 @@ public:
             int rnumb2= 0;
         for(int i= 0; i<mines;i++)
         {
-            rnumb = i;//rand() % size;
-            rnumb2= i + 1;//rand() % size;
+            rnumb = rand() % size;
+            rnumb2= rand() % size;
             minesList[i][0] = rnumb;
             minesList[i][1] = rnumb2;
             if (real[rnumb][rnumb2] != '*')
@@ -161,11 +162,17 @@ public:
     // merges playable and adjacent to make the game playable
     int playableAdjacentMerger(int x, int y)
     {
+        total =(size*size) - mines;
         if (adjacent[x][y] != '*')
         {
-            playable[x][y] = adjacent[x][y];
-            counter++;
-            if (counter == ((size*size)- mines))  {
+            if (playable[x][y] == '.')
+            {
+                counter++;
+                
+                playable[x][y] = adjacent[x][y];
+            }
+            if (counter == total)
+            {
                 return 1;
             }
         }
